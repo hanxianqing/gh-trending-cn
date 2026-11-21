@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" role="img" aria-label="GitHub 每日热门：星标与代码">
+<rect width="1200" height="600" fill="#0E3B2E"/>
+<rect x="24" y="24" width="1152" height="552" fill="none" stroke="#D4A94E" stroke-width="3" rx="16"/>
+<circle cx="1050" cy="110" r="90" fill="#D4A94E" opacity="0.12"/>
+<circle cx="120" cy="480" r="70" fill="#D4A94E" opacity="0.12"/>
+<polygon points="600,90 632,168 716,172 650,222 672,304 600,258 528,304 550,222 484,172 568,168" fill="#D4A94E"/>
+<text x="600" y="400" font-family="Georgia, serif" font-size="92" font-weight="700" fill="#FFF6DC" text-anchor="middle">&lt;/&gt;</text>
+<text x="600" y="470" font-family="Georgia, serif" font-size="40" fill="#D4A94E" text-anchor="middle">GitHub 每日热门</text>
+<text x="600" y="520" font-family="Georgia, serif" font-size="24" fill="#FFF6DC" text-anchor="middle">每天更新 · 中文简介 · 免费查看</text>
+</svg>
