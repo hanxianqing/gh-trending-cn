@@ -1,0 +1,52 @@
+# Daily GitHub Trending fetch — free compute on GitHub Actions (public repo,
+# unlimited minutes). Fetches the 9 trending lists with the repo's own
+# stdlib-only fetch_trending.py and commits the snapshot + archive.
+# Backup to the machine-side refresh (08:26 CST); this keeps the repo's data
+# fresh even if that machine is down. No secrets, no deploy, no cost.
+name: Daily trending fetch
+
+on:
+  schedule:
+    # 16:00 UTC = 00:00 CST, a second daily snapshot apart from the
+    # machine-side refresh.
+    - cron: '0 16 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Archive previous snapshot
+        run: |
+          python3 - <<'EOF'
+          import json, shutil
+          from pathlib import Path
+          p = Path("trending.json")
+          if not p.exists():
+              print("no trending.json yet, skipping archive")
+              raise SystemExit(0)
+          d = json.loads(p.read_text(encoding="utf-8"))
+          a = Path("archives") / (d["fetched_date"] + ".json")
+          a.parent.mkdir(exist_ok=True)
+          if not a.exists():
+              shutil.copy(p, a)
+              print("archived", a)
+          else:
+              print("archive exists, kept", a)
+          EOF
+      - name: Fetch trending (aborts on a thin list, nothing commits)
+        run: python3 fetch_trending.py trending.json
+      - name: Commit snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && echo "no changes" || git commit -m "Daily trending snapshot $(date -u +%Y-%m-%d)"
+          git push
